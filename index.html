@@ -12,40 +12,84 @@
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'SF Pro Display', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      background-attachment: fixed;
       min-height: 100vh;
       padding: 20px;
       color: #333;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
     }
 
     .dashboard-container {
       max-width: 1400px;
       margin: 0 auto;
       background: rgba(255, 255, 255, 0.95);
-      border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      box-shadow: 
+        0 32px 64px rgba(0, 0, 0, 0.12),
+        0 8px 32px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       overflow: hidden;
-    }
-
-    .header {
-      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-      color: white;
-      padding: 30px;
-      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.2);
       position: relative;
     }
 
-    .header::before {
+    .dashboard-container::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
-      bottom: 0;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" /></linearGradient></defs><rect width="100" height="20" fill="url(%23grad)"/></svg>') repeat-x;
+      height: 2px;
+      background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+      z-index: 10;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: white;
+      padding: 40px 30px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: 
+        radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: float 20s ease-in-out infinite;
       opacity: 0.3;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
     }
 
     .header h1 {
@@ -73,42 +117,111 @@
     }
 
     .widget-section {
-      background: white;
-      border-radius: 15px;
-      padding: 25px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-      border: 1px solid rgba(0, 0, 0, 0.05);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: linear-gradient(145deg, #ffffff 0%, #fafbfc 100%);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .widget-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(102, 126, 234, 0.3) 20%, 
+        rgba(102, 126, 234, 0.8) 50%, 
+        rgba(102, 126, 234, 0.3) 80%, 
+        transparent
+      );
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+
+    .widget-section:hover::before {
+      transform: translateX(100%);
     }
 
     .widget-section:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.12),
+        0 8px 16px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
     }
 
     .section-title {
       font-size: 1.4rem;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
       color: #2c3e50;
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-weight: 600;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      position: relative;
     }
 
     .section-title::before {
       content: '';
-      width: 4px;
-      height: 25px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 2px;
+      width: 5px;
+      height: 28px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      border-radius: 3px;
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 17px;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, 
+        rgba(102, 126, 234, 0.3), 
+        rgba(102, 126, 234, 0.1) 20%, 
+        transparent 40%
+      );
+      border-radius: 1px;
     }
 
     .widget {
-      border-radius: 10px;
+      border-radius: 16px;
       overflow: hidden;
-      background: #f8f9fa;
-      border: 1px solid #e9ecef;
+      background: linear-gradient(145deg, #f8f9fa 0%, #ffffff 100%);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      box-shadow: 
+        inset 0 1px 0 rgba(255, 255, 255, 0.8),
+        0 1px 3px rgba(0, 0, 0, 0.04);
+      position: relative;
+    }
+
+    .widget::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, 
+        rgba(102, 126, 234, 0.02) 0%, 
+        transparent 25%, 
+        transparent 75%, 
+        rgba(118, 75, 162, 0.02) 100%
+      );
+      pointer-events: none;
+      z-index: 1;
     }
 
     .tradingview-widget-container {
@@ -121,28 +234,51 @@
     }
 
     .status-bar {
-      background: #f8f9fa;
-      padding: 15px 30px;
-      border-top: 1px solid #e9ecef;
-      font-size: 0.9rem;
+      background: linear-gradient(145deg, #f8f9fa 0%, #ffffff 100%);
+      padding: 20px 30px;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+      font-size: 0.95rem;
       color: #6c757d;
       text-align: center;
+      font-weight: 500;
+      position: relative;
+    }
+
+    .status-bar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 20%;
+      right: 20%;
+      height: 1px;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(102, 126, 234, 0.3) 50%, 
+        transparent
+      );
     }
 
     .status-indicator {
       display: inline-block;
-      width: 8px;
-      height: 8px;
-      background: #28a745;
+      width: 10px;
+      height: 10px;
+      background: linear-gradient(45deg, #28a745, #20c997);
       border-radius: 50%;
-      margin-right: 8px;
+      margin-right: 10px;
       animation: pulse 2s infinite;
+      box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
     }
 
     @keyframes pulse {
-      0% { opacity: 1; }
-      50% { opacity: 0.5; }
-      100% { opacity: 1; }
+      0% {
+        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+      }
     }
 
     @media (max-width: 768px) {
@@ -164,16 +300,50 @@
     }
 
     .crypto-section {
-      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      background: linear-gradient(145deg, 
+        rgba(240, 147, 251, 0.95) 0%, 
+        rgba(245, 87, 108, 0.95) 100%
+      );
       color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .crypto-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: 
+        radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 30px 30px;
+      animation: cryptoFloat 15s linear infinite;
+      opacity: 0.4;
+    }
+
+    @keyframes cryptoFloat {
+      0% { transform: rotate(0deg) translateX(0px); }
+      100% { transform: rotate(360deg) translateX(20px); }
     }
 
     .crypto-section .section-title {
       color: white;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .crypto-section .section-title::before {
-      background: rgba(255, 255, 255, 0.3);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4));
+      box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+    }
+
+    .crypto-section .section-title::after {
+      background: linear-gradient(90deg, 
+        rgba(255, 255, 255, 0.4), 
+        rgba(255, 255, 255, 0.2) 20%, 
+        transparent 40%
+      );
     }
   </style>
 </head>
@@ -341,26 +511,7 @@
           </div>
         </div>
 
-        <!-- Market Analysis -->
-        <div class="widget-section">
-          <h2 class="section-title">📊 Analyse Technique</h2>
-          <div class="widget">
-            <div class="tradingview-widget-container">
-              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
-              {
-                "interval": "1D",
-                "width": "100%",
-                "isTransparent": false,
-                "height": 400,
-                "symbol": "NASDAQ:AAPL",
-                "showIntervalTabs": true,
-                "locale": "fr",
-                "colorTheme": "light"
-              }
-              </script>
-            </div>
-          </div>
-        </div>
+
 
         <!-- Fear & Greed -->
         <div class="widget-section">
@@ -419,23 +570,7 @@
           </div>
         </div>
 
-        <!-- Symbol Info -->
-        <div class="widget-section">
-          <h2 class="section-title">ℹ️ Infos Symbole</h2>
-          <div class="widget">
-            <div class="tradingview-widget-container">
-              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-info.js" async>
-              {
-                "symbol": "NASDAQ:AAPL",
-                "width": "100%",
-                "locale": "fr",
-                "colorTheme": "light",
-                "isTransparent": false
-              }
-              </script>
-            </div>
-          </div>
-        </div>
+
 
         <!-- Market News -->
         <div class="widget-section full-width">
