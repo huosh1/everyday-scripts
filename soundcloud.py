@@ -5,7 +5,7 @@ import subprocess
 from typing import Optional, Dict, Any
 from pypresence import Presence
 
-APP_ID = "1395094434613563435"   # ton App ID
+APP_ID = "A"   # ton App ID
 ASSET_NAME = "_"             # grande image (asset dans Dev Portal)
 SMALL_PLAY = "soundcloud"         # petit asset ▶
 SMALL_PAUSE = "soundcloud"       # petit asset ⏸
