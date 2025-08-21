@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
-import time, subprocess
+import os
+import time
+import subprocess
 from typing import Optional, Dict, Any
 from pypresence import Presence
 
 APP_ID = "1395094434613563435"   # ton App ID
-ASSET_NAME = "_"                 # nom de l'asset (sans extension)
-POLL_EVERY = 5                   # secondes
+ASSET_NAME = "_"             # grande image (asset dans Dev Portal)
+SMALL_PLAY = "soundcloud"         # petit asset ▶
+SMALL_PAUSE = "soundcloud"       # petit asset ⏸
+POLL_EVERY = 5
 
 def sh(cmd: list[str]) -> str:
     try:
-        out = subprocess.check_output(cmd, stderr=subprocess.DEVNULL)
-        return out.decode("utf-8", errors="ignore").strip()
+        return subprocess.check_output(cmd, stderr=subprocess.DEVNULL).decode().strip()
     except subprocess.CalledProcessError:
         return ""
 
@@ -30,17 +33,45 @@ def get_meta(p: str) -> Dict[str, str]:
 def pick_active_player() -> Optional[str]:
     players = list_players()
     for p in players:
-        if get_status(p).lower() == "listening":
+        if get_status(p).lower() == "playing":
             return p
     for p in players:
         if get_status(p).lower() == "paused":
             return p
     return players[0] if players else None
 
+def build_payload(title: str, artist: str, url: str, status: str, started_at: int) -> Dict[str, Any]:
+    details = f"♪  {title}"
+    state   = f"— {artist or '알 수 없음'} 신이 듣는 중 "
+
+    payload: Dict[str, Any] = {
+        "details": details,
+        "state": state,
+        "start": started_at,  # timer “elapsed” qui monte
+        "large_image": ASSET_NAME,
+        "large_text": "사운드클라우드",
+    }
+
+    # Petite icône dynamique ▶ ou ⏸
+    if status.lower() == "playing":
+        payload["small_image"] = SMALL_PLAY
+        payload["small_text"]  = "▶ Playing"
+    elif status.lower() == "paused":
+        payload["small_image"] = SMALL_PAUSE
+        payload["small_text"]  = "⏸ Paused"
+
+    # Boutons
+    buttons = []
+    buttons.append({"label": "🎧 Play", "url": "https://soundcloud.com/"})
+    buttons.append({"label": "by huoshi", "url": "https://github.com/huosh1"})
+    payload["buttons"] = buttons
+
+    return payload
+
 def main():
     rpc = Presence(APP_ID)
     rpc.connect()
-    print("✅ Connected to Discord RPC")
+    print("✅ Connected to Discord RPC aesthetic mode.")
 
     last_payload: Optional[Dict[str, Any]] = None
     started_at = int(time.time())
@@ -50,50 +81,24 @@ def main():
         if not p:
             if last_payload:
                 rpc.clear()
-                print("ℹ️  RPC cleared (no players).")
+                print("ℹ️  RPC cleared (no player).")
                 last_payload = None
             time.sleep(POLL_EVERY)
             continue
 
-        status = get_status(p).title() or "Listening"
+        status = get_status(p) or "Playing"
         meta = get_meta(p)
         title, artist, url = meta["title"], meta["artist"], meta["url"]
 
         if not title:
-            if last_payload:
-                rpc.clear()
-                print(f"ℹ️  RPC cleared (no title from {p}).")
-                last_payload = None
             time.sleep(POLL_EVERY)
             continue
 
-        if not artist and " - " in title:
-            maybe_artist, maybe_track = title.split(" - ", 1)
-            artist = maybe_artist.strip()
-            title = maybe_track.strip()
-
-        # 🎵 + titre
-        details = f" ♪ {title}"
-        state   = f" — {artist or '알 수 없음'} 신이 듣는 중 "
-
-        payload: Dict[str, Any] = {
-            "details": details,
-            "state": state,
-            "start": started_at,
-        }
-
-        # bouton si URL valide
-        if url.startswith("http"):
-            payload["buttons"] = [{"label": "사운드클라우드에서 열기", "url": url}]
-
-        # image large
-        if ASSET_NAME:
-            payload["large_image"] = ASSET_NAME
-            payload["large_text"]  = "사운드클라우드"  # visible au survol
+        payload = build_payload(title, artist, url, status, started_at)
 
         if payload != last_payload:
             rpc.update(**payload)
-            print(f"♪  {artist or '알 수 없음'} — {title}  [{status}]  (player={p})")
+            print(f"♪ {artist or '알 수 없음'} — {title} [{status}]")
             last_payload = payload
 
         time.sleep(POLL_EVERY)
