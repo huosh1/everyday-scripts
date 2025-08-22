@@ -7,7 +7,7 @@ import urllib.request
 from typing import Optional, Dict, Any, List
 from pypresence import Presence
 
-APP_ID = "1395094434613563435"   # ton App ID
+APP_ID = ""   # ton App ID
 ASSET_NAME = "_"             # grande image (asset dans Dev Portal)
 SMALL_PLAY = "jouer"         # petit asset ▶
 SMALL_PAUSE = "pause1"        # petit asset ⏸
