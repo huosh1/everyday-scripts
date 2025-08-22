@@ -5,10 +5,10 @@ import subprocess
 from typing import Optional, Dict, Any
 from pypresence import Presence
 
-APP_ID = "A"   # ton App ID
+APP_ID = "1395094434613563435"   # ton App ID
 ASSET_NAME = "_"             # grande image (asset dans Dev Portal)
-SMALL_PLAY = "soundcloud"         # petit asset ▶
-SMALL_PAUSE = "soundcloud"       # petit asset ⏸
+SMALL_PLAY = "play1"         # petit asset ▶
+SMALL_PAUSE = "play2"       # petit asset ⏸
 POLL_EVERY = 5
 
 def sh(cmd: list[str]) -> str:
@@ -62,7 +62,7 @@ def build_payload(title: str, artist: str, url: str, status: str, started_at: in
 
     # Boutons
     buttons = []
-    buttons.append({"label": "🎧 Play", "url": "https://soundcloud.com/"})
+    buttons.append({"label": "🎧 Play", "url": "https://discord.com"})
     buttons.append({"label": "by huoshi", "url": "https://github.com/huosh1"})
     payload["buttons"] = buttons
 
